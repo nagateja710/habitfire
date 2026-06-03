@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../pages/home/presentation/home_page.dart';
-import '../../pages/habits/presentation/habits_page.dart';
+import '../../pages/streak/presentation/streak_page.dart';
 import '../../pages/analytics/presentation/analytics_page.dart';
 import '../../pages/calendar/presentation/calendar_page.dart';
 
@@ -19,7 +19,7 @@ class _MainNavigationPageState
 
   final pages = const [
     HomePage(),
-    HabitsPage(),
+    StreaksPage(),
     AnalyticsPage(),
     CalendarPage(),
   ];
@@ -42,9 +42,9 @@ class _MainNavigationPageState
             label: 'Home',
           ),
           NavigationDestination(
-            icon: Icon(Icons.list_alt_outlined),
-            selectedIcon: Icon(Icons.list_alt),
-            label: 'Habits',
+            icon: Icon(Icons.local_fire_department_outlined),
+            selectedIcon: Icon(Icons.local_fire_department),
+            label: 'Streaks',
           ),
           NavigationDestination(
             icon: Icon(Icons.bar_chart_outlined),
