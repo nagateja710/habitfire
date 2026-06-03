@@ -23,13 +23,14 @@ class HabitAdapter extends TypeAdapter<Habit> {
       iconCodePoint: fields[3] as int,
       createdAt: fields[4] as DateTime,
       dailyCounts: (fields[5] as Map).cast<String, int>(),
+      activeDays: (fields[6] as List).cast<int>(),
     );
   }
 
   @override
   void write(BinaryWriter writer, Habit obj) {
     writer
-      ..writeByte(6)
+      ..writeByte(7)
       ..writeByte(0)
       ..write(obj.id)
       ..writeByte(1)
@@ -41,7 +42,9 @@ class HabitAdapter extends TypeAdapter<Habit> {
       ..writeByte(4)
       ..write(obj.createdAt)
       ..writeByte(5)
-      ..write(obj.dailyCounts);
+      ..write(obj.dailyCounts)
+      ..writeByte(6)
+      ..write(obj.activeDays);
   }
 
   @override

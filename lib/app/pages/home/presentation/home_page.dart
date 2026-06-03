@@ -14,6 +14,15 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   late Box<Habit> habitsBox;
+
+  DateTime selectedDate = DateTime.now();
+
+  @override
+  void initState() {
+    super.initState();
+    habitsBox = Hive.box<Habit>('habits');
+  }
+
   bool isToday() {
     final now = DateTime.now();
 
@@ -22,30 +31,15 @@ class _HomePageState extends State<HomePage> {
         selectedDate.day == now.day;
   }
 
-  void goToNextDay() {
-    if (isToday()) return;
-
-    setState(() {
-      selectedDate = selectedDate.add(const Duration(days: 1));
-    });
-  }
-
-  DateTime selectedDate = DateTime.now();
-
-  @override
-  void initState() {
-    super.initState();
-
-    habitsBox = Hive.box<Habit>('habits');
-  }
-
   String get dateKey =>
       "${selectedDate.year}-${selectedDate.month}-${selectedDate.day}";
 
   Future<void> addHabit() async {
     await Navigator.push(
       context,
-      MaterialPageRoute(builder: (_) => const AddHabitPage()),
+      MaterialPageRoute(
+        builder: (_) => const AddHabitPage(),
+      ),
     );
 
     setState(() {});
@@ -53,8 +47,52 @@ class _HomePageState extends State<HomePage> {
 
   void goToPreviousDay() {
     setState(() {
-      selectedDate = selectedDate.subtract(const Duration(days: 1));
+      selectedDate =
+          selectedDate.subtract(const Duration(days: 1));
     });
+  }
+
+  void goToNextDay() {
+    if (isToday()) return;
+
+    setState(() {
+      selectedDate =
+          selectedDate.add(const Duration(days: 1));
+    });
+  }
+
+  int calculateStreak(Habit habit) {
+    int streak = 0;
+
+    DateTime current = DateTime(
+      selectedDate.year,
+      selectedDate.month,
+      selectedDate.day,
+    );
+
+    while (true) {
+      // Skip non-scheduled days
+      if (!habit.activeDays.contains(current.weekday)) {
+        current =
+            current.subtract(const Duration(days: 1));
+        continue;
+      }
+
+      final key =
+          "${current.year}-${current.month}-${current.day}";
+
+      final count = habit.dailyCounts[key] ?? 0;
+
+      if (count > 0) {
+        streak++;
+        current =
+            current.subtract(const Duration(days: 1));
+      } else {
+        break;
+      }
+    }
+
+    return streak;
   }
 
   @override
@@ -73,7 +111,8 @@ class _HomePageState extends State<HomePage> {
 
               /// HEADER
               Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                mainAxisAlignment:
+                    MainAxisAlignment.spaceBetween,
                 children: [
                   RichText(
                     text: const TextSpan(
@@ -84,17 +123,24 @@ class _HomePageState extends State<HomePage> {
                       children: [
                         TextSpan(
                           text: 'HABIT',
-                          style: TextStyle(color: Colors.red),
+                          style: TextStyle(
+                            color: Colors.red,
+                          ),
                         ),
                         TextSpan(
                           text: 'FIRE',
                           style: TextStyle(
-                            color: Color.fromRGBO(249, 168, 37, 1),
+                            color: Color.fromRGBO(
+                              249,
+                              168,
+                              37,
+                              1,
+                            ),
                           ),
                         ),
                         WidgetSpan(
-                          alignment: PlaceholderAlignment
-                              .middle, // Keeps the icon centered with the text
+                          alignment:
+                              PlaceholderAlignment.middle,
                           child: Icon(
                             Icons.local_fire_department,
                             size: 34,
@@ -105,14 +151,23 @@ class _HomePageState extends State<HomePage> {
                     ),
                   ),
                   PopupMenuButton<String>(
-                    icon: const Icon(Icons.menu, size: 32),
+                    icon: const Icon(
+                      Icons.menu,
+                      size: 32,
+                    ),
                     itemBuilder: (context) => const [
-                      PopupMenuItem(value: 'settings', child: Text('Settings')),
+                      PopupMenuItem(
+                        value: 'settings',
+                        child: Text('Settings'),
+                      ),
                       PopupMenuItem(
                         value: 'darkmode',
                         child: Text('Dark Mode'),
                       ),
-                      PopupMenuItem(value: 'about', child: Text('About')),
+                      PopupMenuItem(
+                        value: 'about',
+                        child: Text('About'),
+                      ),
                     ],
                   ),
                 ],
@@ -125,7 +180,9 @@ class _HomePageState extends State<HomePage> {
                 children: [
                   FilledButton.tonal(
                     onPressed: goToPreviousDay,
-                    child: const Icon(Icons.chevron_left),
+                    child: const Icon(
+                      Icons.chevron_left,
+                    ),
                   ),
 
                   const SizedBox(width: 12),
@@ -134,7 +191,8 @@ class _HomePageState extends State<HomePage> {
                     child: OutlinedButton(
                       onPressed: () {
                         setState(() {
-                          selectedDate = DateTime.now();
+                          selectedDate =
+                              DateTime.now();
                         });
                       },
                       child: Text(
@@ -143,7 +201,8 @@ class _HomePageState extends State<HomePage> {
                             : "${selectedDate.day}/${selectedDate.month}/${selectedDate.year}",
                         style: const TextStyle(
                           fontSize: 18,
-                          fontWeight: FontWeight.bold,
+                          fontWeight:
+                              FontWeight.bold,
                         ),
                       ),
                     ),
@@ -154,7 +213,9 @@ class _HomePageState extends State<HomePage> {
                   if (!isToday())
                     FilledButton.tonal(
                       onPressed: goToNextDay,
-                      child: const Icon(Icons.chevron_right),
+                      child: const Icon(
+                        Icons.chevron_right,
+                      ),
                     ),
                 ],
               ),
@@ -163,40 +224,76 @@ class _HomePageState extends State<HomePage> {
 
               Expanded(
                 child: ValueListenableBuilder(
-                  valueListenable: habitsBox.listenable(),
-                  builder: (context, Box<Habit> box, _) {
+                  valueListenable:
+                      habitsBox.listenable(),
+                  builder: (
+                    context,
+                    Box<Habit> box,
+                    _,
+                  ) {
                     if (box.isEmpty) {
                       return const Center(
                         child: Text(
                           "No habits yet.\nTap + to add one.",
-                          textAlign: TextAlign.center,
+                          textAlign:
+                              TextAlign.center,
                         ),
                       );
                     }
 
                     return ListView.builder(
                       itemCount: box.length,
-                      itemBuilder: (context, index) {
-                        final habit = box.getAt(index)!;
+                      itemBuilder:
+                          (context, index) {
+                        final habit =
+                            box.getAt(index)!;
 
-                        final countForDay = habit.dailyCounts[dateKey] ?? 0;
+                        // Hide habit on days it is not scheduled
+                        if (!habit.activeDays
+                            .contains(
+                              selectedDate.weekday,
+                            )) {
+                          return const SizedBox
+                              .shrink();
+                        }
 
-                        final completedToday = countForDay > 0;
+                        final countForDay =
+                            habit.dailyCounts[
+                                    dateKey] ??
+                                0;
+
+                        final completedToday =
+                            countForDay > 0;
+
+                        final streak =
+                            calculateStreak(
+                              habit,
+                            );
 
                         return Padding(
-                          padding: const EdgeInsets.only(bottom: 16),
+                          padding:
+                              const EdgeInsets.only(
+                            bottom: 16,
+                          ),
                           child: HabitCard(
                             title: habit.title,
-                            subtitle: habit.category,
-                            iconCodePoint: habit.iconCodePoint,
+                            subtitle:
+                                habit.category,
+                            iconCodePoint:
+                                habit
+                                    .iconCodePoint,
                             count: countForDay,
-                            completed: completedToday,
-                            onCountTap: () async {
-                              habit.dailyCounts[dateKey] = countForDay + 1;
+                            streak: streak,
+                            completed:
+                                completedToday,
+                            onCountTap:
+                                () async {
+                              habit.dailyCounts[
+                                      dateKey] =
+                                  countForDay +
+                                      1;
 
                               await habit.save();
-
-                              // setState(() {});
                             },
                           ),
                         );

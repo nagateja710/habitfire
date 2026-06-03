@@ -1,6 +1,7 @@
 import 'package:hive/hive.dart';
 
 part 'habit.g.dart';
+
 @HiveType(typeId: 0)
 class Habit extends HiveObject {
   @HiveField(0)
@@ -21,6 +22,9 @@ class Habit extends HiveObject {
   @HiveField(5)
   Map<String, int> dailyCounts;
 
+  @HiveField(6)
+  List<int> activeDays;
+
   Habit({
     required this.id,
     required this.title,
@@ -28,5 +32,6 @@ class Habit extends HiveObject {
     required this.iconCodePoint,
     required this.createdAt,
     this.dailyCounts = const {},
+    this.activeDays = const [1,2,3,4,5,6,7],
   });
 }

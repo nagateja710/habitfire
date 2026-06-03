@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 
-
-// Removed 'const' from before the map opening brace
 final Map<int, Color> iconColorMap = {
   Icons.water_drop.codePoint: Colors.blue,
   Icons.fitness_center.codePoint: Colors.blueGrey,
@@ -34,11 +32,13 @@ final Map<int, Color> iconColorMap = {
   Icons.cleaning_services.codePoint: Colors.blueAccent,
   Icons.check_circle.codePoint: Colors.green,
 };
+
 class HabitCard extends StatelessWidget {
   final String title;
   final String subtitle;
   final int iconCodePoint;
   final int count;
+  final int streak;
   final bool completed;
   final VoidCallback onCountTap;
 
@@ -48,89 +48,126 @@ class HabitCard extends StatelessWidget {
     required this.subtitle,
     required this.iconCodePoint,
     required this.count,
+    required this.streak,
     required this.completed,
     required this.onCountTap,
   });
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      elevation: 1,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(24),
-      ),
-      child: Padding(
-        padding: const EdgeInsets.all(20),
-        child: Row(
-          children: [
-            Container(
-              width: 55,
-              height: 55,
-              decoration: BoxDecoration(
-                border: Border.all(width: 2),
-                borderRadius: BorderRadius.circular(12),
-              ),
-              child: Icon(
-                IconData(
-                  iconCodePoint,
-                  fontFamily: 'MaterialIcons',
+    return Stack(
+      children: [
+        Card(
+          elevation: 1,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(24),
+          ),
+          child: Padding(
+            padding: const EdgeInsets.all(20),
+            child: Row(
+              children: [
+                Container(
+                  width: 55,
+                  height: 55,
+                  decoration: BoxDecoration(
+                    border: Border.all(width: 2),
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: Icon(
+                    IconData(
+                      iconCodePoint,
+                      fontFamily: 'MaterialIcons',
+                    ),
+                    color:
+                        iconColorMap[iconCodePoint] ??
+                        Colors.grey,
+                  ),
                 ),
-                color: iconColorMap[iconCodePoint]?? Colors.grey,
-                // color: completed
-                //     ? Colors.green
-                //     : Colors.grey,
-              ),
-            ),
 
-            const SizedBox(width: 20),
+                const SizedBox(width: 20),
 
-            Expanded(
-              child: Column(
-                crossAxisAlignment:
-                    CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    title,
-                    style: const TextStyle(
-                      fontSize: 24,
-                      fontWeight: FontWeight.bold,
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment:
+                        CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        title,
+                        style: const TextStyle(
+                          fontSize: 24,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      Text(
+                        subtitle,
+                        style: TextStyle(
+                          color: Colors.grey.shade600,
+                          fontSize: 18,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+
+                GestureDetector(
+                  onTap: onCountTap,
+                  child: CircleAvatar(
+                    radius: 28,
+                    backgroundColor: count > 0
+                        ? Colors.green.withOpacity(.15)
+                        : Colors.grey.withOpacity(.15),
+                    child: Text(
+                      '$count',
+                      style: TextStyle(
+                        fontSize: 22,
+                        fontWeight: FontWeight.bold,
+                        color: count > 0
+                            ? Colors.green
+                            : Colors.grey,
+                      ),
                     ),
                   ),
+                ),
+              ],
+            ),
+          ),
+        ),
+
+        if (streak > 0)
+          Positioned(
+            top: 6,
+            right: 80,
+            child: Container(
+              padding: const EdgeInsets.symmetric(
+                horizontal: 8,
+                vertical: 4,
+              ),
+              decoration: BoxDecoration(
+                color: Colors.orange.withOpacity(0.12),
+                borderRadius: BorderRadius.circular(20),
+              ),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  const Icon(
+                    Icons.local_fire_department,
+                    size: 15,
+                    color: Colors.orange,
+                  ),
+                  const SizedBox(width: 2),
                   Text(
-                    subtitle,
-                    style: TextStyle(
-                      color: Colors.grey.shade600,
-                      fontSize: 18,
+                    '$streak',
+                    style: const TextStyle(
+                      fontSize: 12,
+                      fontWeight: FontWeight.w600,
+                      color: Colors.orange,
                     ),
                   ),
                 ],
               ),
             ),
-
-            GestureDetector(
-              onTap: onCountTap,
-              child: CircleAvatar(
-                radius: 28,
-                backgroundColor:
-                    count > 0
-                        ? Colors.green.withOpacity(.15)
-                        : Colors.grey.withOpacity(.15),
-                child: Text(
-                  '$count',
-                  style: TextStyle(
-                    fontSize: 22,
-                    fontWeight: FontWeight.bold,
-                    color:
-                        count > 0
-                            ? Colors.green
-                            : Colors.grey,
-                  ),
-                ),
-              ),
-            ),
-          ],
-        ),
-      ),
+          ),
+      ],
     );
   }
 }
