@@ -1,5 +1,39 @@
 import 'package:flutter/material.dart';
 
+
+// Removed 'const' from before the map opening brace
+final Map<int, Color> iconColorMap = {
+  Icons.water_drop.codePoint: Colors.blue,
+  Icons.fitness_center.codePoint: Colors.blueGrey,
+  Icons.book.codePoint: Colors.indigo,
+  Icons.self_improvement.codePoint: Colors.teal,
+  Icons.run_circle.codePoint: Colors.orange,
+  Icons.restaurant.codePoint: Colors.green,
+  Icons.local_fire_department.codePoint: Colors.deepOrange,
+  Icons.savings.codePoint: Colors.pink,
+  Icons.school.codePoint: Colors.purple,
+  Icons.work.codePoint: Colors.brown,
+  Icons.code.codePoint: Colors.cyan,
+  Icons.music_note.codePoint: Colors.deepPurple,
+  Icons.sports_soccer.codePoint: Colors.lightGreen,
+  Icons.bed.codePoint: Colors.indigoAccent,
+  Icons.favorite.codePoint: Colors.red,
+  Icons.star.codePoint: Colors.amber,
+  Icons.lightbulb.codePoint: Colors.yellow,
+  Icons.psychology.codePoint: Colors.purpleAccent,
+  Icons.spa.codePoint: Colors.tealAccent,
+  Icons.local_drink.codePoint: Colors.lightBlue,
+  Icons.directions_walk.codePoint: Colors.lime,
+  Icons.monitor_heart.codePoint: Colors.redAccent,
+  Icons.fastfood.codePoint: Colors.orangeAccent,
+  Icons.laptop.codePoint: Colors.grey,
+  Icons.timer.codePoint: Colors.red,
+  Icons.pets.codePoint: Colors.brown,
+  Icons.language.codePoint: Colors.cyanAccent,
+  Icons.travel_explore.codePoint: Colors.teal,
+  Icons.cleaning_services.codePoint: Colors.blueAccent,
+  Icons.check_circle.codePoint: Colors.green,
+};
 class HabitCard extends StatelessWidget {
   final String title;
   final String subtitle;
@@ -41,9 +75,10 @@ class HabitCard extends StatelessWidget {
                   iconCodePoint,
                   fontFamily: 'MaterialIcons',
                 ),
-                color: completed
-                    ? Colors.green
-                    : Colors.grey,
+                color: iconColorMap[iconCodePoint]?? Colors.grey,
+                // color: completed
+                //     ? Colors.green
+                //     : Colors.grey,
               ),
             ),
 
