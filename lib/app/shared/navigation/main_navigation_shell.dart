@@ -1,0 +1,63 @@
+import 'package:flutter/material.dart';
+
+import '../../pages/home/presentation/home_page.dart';
+import '../../pages/habits/presentation/habits_page.dart';
+import '../../pages/analytics/presentation/analytics_page.dart';
+import '../../pages/calendar/presentation/calendar_page.dart';
+
+class MainNavigationPage extends StatefulWidget {
+  const MainNavigationPage({super.key});
+
+  @override
+  State<MainNavigationPage> createState() =>
+      _MainNavigationPageState();
+}
+
+class _MainNavigationPageState
+    extends State<MainNavigationPage> {
+  int currentIndex = 0;
+
+  final pages = const [
+    HomePage(),
+    HabitsPage(),
+    AnalyticsPage(),
+    CalendarPage(),
+  ];
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: pages[currentIndex],
+      bottomNavigationBar: NavigationBar(
+        selectedIndex: currentIndex,
+        onDestinationSelected: (index) {
+          setState(() {
+            currentIndex = index;
+          });
+        },
+        destinations: const [
+          NavigationDestination(
+            icon: Icon(Icons.home_outlined),
+            selectedIcon: Icon(Icons.home),
+            label: 'Home',
+          ),
+          NavigationDestination(
+            icon: Icon(Icons.list_alt_outlined),
+            selectedIcon: Icon(Icons.list_alt),
+            label: 'Habits',
+          ),
+          NavigationDestination(
+            icon: Icon(Icons.bar_chart_outlined),
+            selectedIcon: Icon(Icons.bar_chart),
+            label: 'Analytics',
+          ),
+          NavigationDestination(
+            icon: Icon(Icons.calendar_month_outlined),
+            selectedIcon: Icon(Icons.calendar_month),
+            label: 'Calendar',
+          ),
+        ],
+      ),
+    );
+  }
+}
