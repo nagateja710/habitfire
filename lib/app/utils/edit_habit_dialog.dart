@@ -15,7 +15,7 @@ class _EditHabitDialogState extends State<EditHabitDialog> {
 
   late List<int> selectedDays;
 
-  final days = const ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
+  final days = const ["M", "T", "W", "T", "F", "S", "S"];
 
   @override
   void initState() {
@@ -44,8 +44,8 @@ class _EditHabitDialogState extends State<EditHabitDialog> {
 
             Wrap(
               alignment: WrapAlignment.center,
-              spacing: 4,
-              runSpacing: 2,
+              spacing: 6,
+              runSpacing: 4,
               children: List.generate(7, (index) {
                 final day = index + 1;
                 final selected = selectedDays.contains(day);
@@ -72,12 +72,12 @@ class _EditHabitDialogState extends State<EditHabitDialog> {
 
                       AnimatedScale(
                         duration: const Duration(milliseconds: 150),
-                        scale: selected ? 1.1 : 1,
+                        scale: selected ? 1.2: 1,
                         child: Icon(
                           selected
                               ? Icons.local_fire_department
                               : Icons.local_fire_department_outlined,
-                          size: 34,
+                          size: 28,
                           color: selected
                               ? Colors.orange
                               : Colors.grey.shade400,
@@ -188,7 +188,7 @@ class _EditHabitDialogState extends State<EditHabitDialog> {
                     size: 18,
                   ),
                   label: const Text(
-                    "Move to Journeys",
+                    "Move to\nJourneys",
                     style: TextStyle(color: Colors.orange),
                   ),
                   onPressed: () async {

@@ -135,6 +135,8 @@ class StreaksPage extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
+          backgroundColor: Colors.transparent,
+  // surfaceTintColor: Colors.transparent,
         title: Row(
           children: const [
             Icon(Icons.insights),
@@ -394,12 +396,12 @@ class StreaksPage extends StatelessWidget {
                                   Icons.workspace_premium,
                                 ),
                                 _buildMetricItem(
-                                  "Personal Record",
+                                  " Peak",
                                   "$record logs",
                                   Icons.bolt,
                                 ),
                                 _buildMetricItem(
-                                  "Daily Average",
+                                  "Average",
                                   avg.toStringAsFixed(1),
                                   Icons.functions,
                                 ),

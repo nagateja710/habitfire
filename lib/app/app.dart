@@ -17,27 +17,26 @@ class HabitFireApp extends StatelessWidget {
         return MaterialApp(
           // 3. Bind the live state selection
           themeMode: currentThemeMode,
-          
+
           // Light Theme configuration
           theme: ThemeData(
             useMaterial3: true,
             colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue),
           ),
-          
+
           // 4. Added Dark Theme setup so colors flip correctly on dark backgrounds
           darkTheme: ThemeData(
             useMaterial3: true,
             colorScheme: ColorScheme.fromSeed(
-              seedColor: Colors.orange.shade300,
+              seedColor: Colors.deepOrange,
               brightness: Brightness.dark,
             ),
+            scaffoldBackgroundColor: const Color(0xFF121212),
+            cardTheme: const CardThemeData(color: Color(0xFF1E1E1E)),
           ),
-          
+
           debugShowCheckedModeBanner: false,
-          home: const Scaffold(
-            appBar: UpperNav(),
-            body: MainNavigationPage(),
-          ),
+          home: const Scaffold(appBar: UpperNav(), body: MainNavigationPage()),
         );
       },
     );

@@ -118,6 +118,7 @@ Widget statCard(
       ),
     ),
   );
+
 }
   @override
   Widget build(BuildContext context) {
@@ -125,6 +126,7 @@ Widget statCard(
 
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: Colors.transparent,
         title: const Text("Analytics"),
       ),
       body: ValueListenableBuilder(
@@ -208,7 +210,7 @@ Widget statCard(
   mainAxisSpacing: 12,
   shrinkWrap: true,
   physics: const NeverScrollableScrollPhysics(),
-  childAspectRatio: 1.25,
+  childAspectRatio: 1.1,
   children: [
     statCard(
       "Total Habits",

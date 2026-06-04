@@ -55,6 +55,7 @@ class AchievementsPage extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: Colors.transparent,
         title: Row(
           children: [
             const Icon(Icons.star,color: Colors.yellow),
@@ -290,7 +291,7 @@ class _SummaryGrid extends StatelessWidget {
       itemCount: stats.length,
       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: 2,
-        childAspectRatio: 1.5,
+        childAspectRatio: 1.3,
         crossAxisSpacing: 12,
         mainAxisSpacing: 12,
       ),
