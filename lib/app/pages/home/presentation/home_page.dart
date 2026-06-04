@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
 import 'package:habitfire/app/models/habit.dart';
@@ -110,68 +111,68 @@ class _HomePageState extends State<HomePage> {
               const SizedBox(height: 10),
 
               /// HEADER
-              Row(
-                mainAxisAlignment:
-                    MainAxisAlignment.spaceBetween,
-                children: [
-                  RichText(
-                    text: const TextSpan(
-                      style: TextStyle(
-                        fontSize: 34,
-                        fontWeight: FontWeight.bold,
-                      ),
-                      children: [
-                        TextSpan(
-                          text: 'HABIT',
-                          style: TextStyle(
-                            color: Colors.red,
-                          ),
-                        ),
-                        TextSpan(
-                          text: 'FIRE',
-                          style: TextStyle(
-                            color: Color.fromRGBO(
-                              249,
-                              168,
-                              37,
-                              1,
-                            ),
-                          ),
-                        ),
-                        WidgetSpan(
-                          alignment:
-                              PlaceholderAlignment.middle,
-                          child: Icon(
-                            Icons.local_fire_department,
-                            size: 34,
-                            color: Colors.yellow,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  PopupMenuButton<String>(
-                    icon: const Icon(
-                      Icons.menu,
-                      size: 32,
-                    ),
-                    itemBuilder: (context) => const [
-                      PopupMenuItem(
-                        value: 'settings',
-                        child: Text('Settings'),
-                      ),
-                      PopupMenuItem(
-                        value: 'darkmode',
-                        child: Text('Dark Mode'),
-                      ),
-                      PopupMenuItem(
-                        value: 'about',
-                        child: Text('About'),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
+              // Row(
+              //   mainAxisAlignment:
+              //       MainAxisAlignment.spaceBetween,
+              //   children: [
+              //     RichText(
+              //       text: const TextSpan(
+              //         style: TextStyle(
+              //           fontSize: 34,
+              //           fontWeight: FontWeight.bold,
+              //         ),
+              //         children: [
+              //           TextSpan(
+              //             text: 'HABIT',
+              //             style: TextStyle(
+              //               color: Colors.red,
+              //             ),
+              //           ),
+              //           TextSpan(
+              //             text: 'FIRE',
+              //             style: TextStyle(
+              //               color: Color.fromRGBO(
+              //                 249,
+              //                 168,
+              //                 37,
+              //                 1,
+              //               ),
+              //             ),
+              //           ),
+              //           WidgetSpan(
+              //             alignment:
+              //                 PlaceholderAlignment.middle,
+              //             child: Icon(
+              //               Icons.local_fire_department,
+              //               size: 34,
+              //               color: Colors.yellow,
+              //             ),
+              //           ),
+              //         ],
+              //       ),
+              //     ),
+              //     PopupMenuButton<String>(
+              //       icon: const Icon(
+              //         Icons.menu,
+              //         size: 32,
+              //       ),
+              //       itemBuilder: (context) => const [
+              //         PopupMenuItem(
+              //           value: 'settings',
+              //           child: Text('Settings'),
+              //         ),
+              //         PopupMenuItem(
+              //           value: 'darkmode',
+              //           child: Text('Dark Mode'),
+              //         ),
+              //         PopupMenuItem(
+              //           value: 'about',
+              //           child: Text('About'),
+              //         ),
+              //       ],
+              //     ),
+              //   ],
+              // ),
 
               const SizedBox(height: 30),
 
@@ -220,7 +221,7 @@ class _HomePageState extends State<HomePage> {
                 ],
               ),
 
-              const SizedBox(height: 30),
+              const SizedBox(height: 10),
 
               Expanded(
                 child: ValueListenableBuilder(
@@ -273,7 +274,7 @@ class _HomePageState extends State<HomePage> {
                         return Padding(
                           padding:
                               const EdgeInsets.only(
-                            bottom: 16,
+                            bottom: 2,
                           ),
                           child: HabitCard(
                             title: habit.title,
@@ -295,6 +296,13 @@ class _HomePageState extends State<HomePage> {
 
                               await habit.save();
                             },
+                             onCountLongPress: () async {
+    setState(() {
+      habit.dailyCounts[dateKey] = 0;
+    });
+    await habit.save();
+    Feedback.forLongPress(context); // Optional subtle rumble feedback
+  },
                           ),
                         );
                       },

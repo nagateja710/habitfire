@@ -41,6 +41,7 @@ class HabitCard extends StatelessWidget {
   final int streak;
   final bool completed;
   final VoidCallback onCountTap;
+  final VoidCallback onCountLongPress; // 1. Added the long press callback parameter
 
   const HabitCard({
     super.key,
@@ -51,6 +52,7 @@ class HabitCard extends StatelessWidget {
     required this.streak,
     required this.completed,
     required this.onCountTap,
+    required this.onCountLongPress, // 2. Added to the constructor requirements
   });
 
   @override
@@ -63,7 +65,7 @@ class HabitCard extends StatelessWidget {
             borderRadius: BorderRadius.circular(24),
           ),
           child: Padding(
-            padding: const EdgeInsets.all(20),
+            padding: const EdgeInsets.all(10),
             child: Row(
               children: [
                 Container(
@@ -111,6 +113,7 @@ class HabitCard extends StatelessWidget {
 
                 GestureDetector(
                   onTap: onCountTap,
+                  onLongPress: onCountLongPress, // 3. Bound the long press event handler here
                   child: CircleAvatar(
                     radius: 28,
                     backgroundColor: count > 0

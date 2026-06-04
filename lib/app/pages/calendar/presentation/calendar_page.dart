@@ -45,20 +45,20 @@ class _CalendarPageState extends State<CalendarPage> {
     }
 
     if (total == 0) {
-      return Colors.grey.shade300;
+      return Colors.white;
     }
 
     final ratio = completed / total;
 
     if (ratio == 1) {
-      return Colors.green;
+      return Colors.orange.withOpacity(0.9);
     }
 
     if (ratio >= 0.1) {
-      return Colors.lightGreen;
+      return Colors.yellow.withOpacity(0.5);
     }
 
-    return Colors.grey.shade300;
+    return Colors.white.withOpacity(0.1);
   }
 
   @override
@@ -136,7 +136,7 @@ class _CalendarPageState extends State<CalendarPage> {
       return Container(
         margin: const EdgeInsets.all(4),
         decoration: BoxDecoration(
-          color: getDayColor(day).withOpacity(.15),
+          color: getDayColor(day),
           shape: BoxShape.circle,
         ),
         child: Center(
