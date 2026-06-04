@@ -6,17 +6,14 @@
 
 ## 📱 Screenshots
 
-### Home
-![Home](assets/screenshots/home.jpg)
+<h2 align="center">📱 App Screenshots</h2>
 
-### Calendar
-![Calendar](assets/screenshots/calendar.jpg)
-
-### Streaks
-![Streaks](assets/screenshots/streaks.jpg)
-
-### Analytics
-![Analytics](assets/screenshots/analytics.jpg)
+<p align="center">
+  <img src="assets/screenshots/home.jpg" width="180"/>
+  <img src="assets/screenshots/calendar.jpg" width="180"/>
+  <img src="assets/screenshots/streaks.jpg" width="180"/>
+  <img src="assets/screenshots/analytics.jpg" width="180"/>
+</p>
 
 ---
 
