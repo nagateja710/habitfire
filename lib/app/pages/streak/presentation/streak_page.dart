@@ -139,7 +139,7 @@ class StreaksPage extends StatelessWidget {
           children: const [
             Icon(Icons.insights),
             SizedBox(width: 8),
-            Text("Performance Insights"),
+            Text("Streaks & Peaks"),
           ],
         ),
       ),
