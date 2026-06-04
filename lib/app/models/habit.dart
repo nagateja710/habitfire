@@ -25,6 +25,12 @@ class Habit extends HiveObject {
   @HiveField(6)
   List<int> activeDays;
 
+  @HiveField(7)
+  bool? isAchieved;
+
+  @HiveField(8)
+  DateTime? achievedAt;
+
   Habit({
     required this.id,
     required this.title,
@@ -32,6 +38,8 @@ class Habit extends HiveObject {
     required this.iconCodePoint,
     required this.createdAt,
     this.dailyCounts = const {},
-    this.activeDays = const [1,2,3,4,5,6,7],
+    this.activeDays = const [1, 2, 3, 4, 5, 6, 7],
+    this.isAchieved = false,
+    this.achievedAt,
   });
 }

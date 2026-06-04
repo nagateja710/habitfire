@@ -4,6 +4,7 @@ import '../../pages/home/presentation/home_page.dart';
 import '../../pages/streak/presentation/streak_page.dart';
 import '../../pages/analytics/presentation/analytics_page.dart';
 import '../../pages/calendar/presentation/calendar_page.dart';
+import '../../pages/achivements/presentation/achivements_page.dart';
 
 class MainNavigationPage extends StatefulWidget {
   const MainNavigationPage({super.key});
@@ -20,6 +21,7 @@ class _MainNavigationPageState extends State<MainNavigationPage> {
     CalendarPage(),
     StreaksPage(),
     AnalyticsPage(),
+    AchievementsPage(),
   ];
 
   @override
@@ -53,6 +55,11 @@ class _MainNavigationPageState extends State<MainNavigationPage> {
             icon: Icon(Icons.bar_chart_outlined),
             selectedIcon: Icon(Icons.bar_chart),
             label: 'Analytics',
+          ),
+          NavigationDestination(
+            icon: Icon(Icons.emoji_events_rounded),
+            selectedIcon: Icon(Icons.emoji_events),
+            label: 'Journeys',
           ),
         ],
       ),

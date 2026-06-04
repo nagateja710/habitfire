@@ -5,7 +5,7 @@ import 'package:habitfire/app/utils/edit_habit_dialog.dart';
 import 'package:habitfire/app/models/habit.dart';
 import 'package:habitfire/app/widgets/habit_card.dart';
 import 'package:habitfire/app/pages/addhabit/presentation/add_habit_page.dart';
-
+import 'package:habitfire/app/utils/helper.dart';
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
 
@@ -38,9 +38,7 @@ class _HomePageState extends State<HomePage> {
   Future<void> addHabit() async {
     await Navigator.push(
       context,
-      MaterialPageRoute(
-        builder: (_) => const AddHabitPage(),
-      ),
+      MaterialPageRoute(builder: (_) => const AddHabitPage()),
     );
 
     setState(() {});
@@ -48,8 +46,7 @@ class _HomePageState extends State<HomePage> {
 
   void goToPreviousDay() {
     setState(() {
-      selectedDate =
-          selectedDate.subtract(const Duration(days: 1));
+      selectedDate = selectedDate.subtract(const Duration(days: 1));
     });
   }
 
@@ -57,8 +54,7 @@ class _HomePageState extends State<HomePage> {
     if (isToday()) return;
 
     setState(() {
-      selectedDate =
-          selectedDate.add(const Duration(days: 1));
+      selectedDate = selectedDate.add(const Duration(days: 1));
     });
   }
 
@@ -74,20 +70,17 @@ class _HomePageState extends State<HomePage> {
     while (true) {
       // Skip non-scheduled days
       if (!habit.activeDays.contains(current.weekday)) {
-        current =
-            current.subtract(const Duration(days: 1));
+        current = current.subtract(const Duration(days: 1));
         continue;
       }
 
-      final key =
-          "${current.year}-${current.month}-${current.day}";
+      final key = "${current.year}-${current.month}-${current.day}";
 
       final count = habit.dailyCounts[key] ?? 0;
 
       if (count > 0) {
         streak++;
-        current =
-            current.subtract(const Duration(days: 1));
+        current = current.subtract(const Duration(days: 1));
       } else {
         break;
       }
@@ -110,70 +103,6 @@ class _HomePageState extends State<HomePage> {
             children: [
               const SizedBox(height: 10),
 
-              /// HEADER
-              // Row(
-              //   mainAxisAlignment:
-              //       MainAxisAlignment.spaceBetween,
-              //   children: [
-              //     RichText(
-              //       text: const TextSpan(
-              //         style: TextStyle(
-              //           fontSize: 34,
-              //           fontWeight: FontWeight.bold,
-              //         ),
-              //         children: [
-              //           TextSpan(
-              //             text: 'HABIT',
-              //             style: TextStyle(
-              //               color: Colors.red,
-              //             ),
-              //           ),
-              //           TextSpan(
-              //             text: 'FIRE',
-              //             style: TextStyle(
-              //               color: Color.fromRGBO(
-              //                 249,
-              //                 168,
-              //                 37,
-              //                 1,
-              //               ),
-              //             ),
-              //           ),
-              //           WidgetSpan(
-              //             alignment:
-              //                 PlaceholderAlignment.middle,
-              //             child: Icon(
-              //               Icons.local_fire_department,
-              //               size: 34,
-              //               color: Colors.yellow,
-              //             ),
-              //           ),
-              //         ],
-              //       ),
-              //     ),
-              //     PopupMenuButton<String>(
-              //       icon: const Icon(
-              //         Icons.menu,
-              //         size: 32,
-              //       ),
-              //       itemBuilder: (context) => const [
-              //         PopupMenuItem(
-              //           value: 'settings',
-              //           child: Text('Settings'),
-              //         ),
-              //         PopupMenuItem(
-              //           value: 'darkmode',
-              //           child: Text('Dark Mode'),
-              //         ),
-              //         PopupMenuItem(
-              //           value: 'about',
-              //           child: Text('About'),
-              //         ),
-              //       ],
-              //     ),
-              //   ],
-              // ),
-
               const SizedBox(height: 30),
 
               /// DATE CONTROLS
@@ -181,9 +110,7 @@ class _HomePageState extends State<HomePage> {
                 children: [
                   FilledButton.tonal(
                     onPressed: goToPreviousDay,
-                    child: const Icon(
-                      Icons.chevron_left,
-                    ),
+                    child: const Icon(Icons.chevron_left),
                   ),
 
                   const SizedBox(width: 12),
@@ -192,8 +119,7 @@ class _HomePageState extends State<HomePage> {
                     child: OutlinedButton(
                       onPressed: () {
                         setState(() {
-                          selectedDate =
-                              DateTime.now();
+                          selectedDate = DateTime.now();
                         });
                       },
                       child: Text(
@@ -202,8 +128,7 @@ class _HomePageState extends State<HomePage> {
                             : "${selectedDate.day}/${selectedDate.month}/${selectedDate.year}",
                         style: const TextStyle(
                           fontSize: 18,
-                          fontWeight:
-                              FontWeight.bold,
+                          fontWeight: FontWeight.bold,
                         ),
                       ),
                     ),
@@ -214,9 +139,7 @@ class _HomePageState extends State<HomePage> {
                   if (!isToday())
                     FilledButton.tonal(
                       onPressed: goToNextDay,
-                      child: const Icon(
-                        Icons.chevron_right,
-                      ),
+                      child: const Icon(Icons.chevron_right),
                     ),
                 ],
               ),
@@ -225,157 +148,180 @@ class _HomePageState extends State<HomePage> {
 
               Expanded(
                 child: ValueListenableBuilder(
-                  valueListenable:
-                      habitsBox.listenable(),
-                  builder: (
-                    context,
-                    Box<Habit> box,
-                    _,
-                  ) {
+                  valueListenable: habitsBox.listenable(),
+                  builder: (context, Box<Habit> box, _) {
                     if (box.isEmpty) {
                       return const Center(
                         child: Text(
                           "No habits yet.\nTap + to add one.",
-                          textAlign:
-                              TextAlign.center,
+                          textAlign: TextAlign.center,
                         ),
                       );
                     }
 
+                    // return ListView.builder(
+                    final habits = HabitFilters.active(box.values.toList());
+
                     return ListView.builder(
-                      itemCount: box.length,
-                      itemBuilder:
-                          (context, index) {
-                        final habit =
-                            box.getAt(index)!;
+                      itemCount: habits.length,
+                      itemBuilder: (context, index) {
+                        final habit = habits[index];
 
                         // Hide habit on days it is not scheduled
-                        if (!habit.activeDays
-                            .contains(
-                              selectedDate.weekday,
-                            )) {
-                          return const SizedBox
-                              .shrink();
+                        if (!habit.activeDays.contains(selectedDate.weekday)) {
+                          return const SizedBox.shrink();
                         }
 
-                        final countForDay =
-                            habit.dailyCounts[
-                                    dateKey] ??
-                                0;
+                        final countForDay = habit.dailyCounts[dateKey] ?? 0;
 
-                        final completedToday =
-                            countForDay > 0;
+                        final completedToday = countForDay > 0;
 
-                        final streak =
-                            calculateStreak(
-                              habit,
-                            );
+                        final streak = calculateStreak(habit);
 
-return Dismissible(
-  key: ValueKey(habit.id),
+                        return Dismissible(
+                          key: ValueKey(habit.id),
 
-  background: Container(
-    alignment: Alignment.centerLeft,
-    padding: const EdgeInsets.symmetric(horizontal: 20),
-    decoration: BoxDecoration(
-      color: Colors.red.shade600,
-      borderRadius: BorderRadius.circular(16),
-    ),
-    child: const Icon(
-      Icons.delete,
-      color: Colors.white,
-      size: 32,
-    ),
-  ),
+                          background: Container(
+                            alignment: Alignment.centerLeft,
+                            padding: const EdgeInsets.symmetric(horizontal: 20),
+                            decoration: BoxDecoration(
+                              color: Colors.red.shade600,
+                              borderRadius: BorderRadius.circular(16),
+                            ),
+                            child: const Icon(
+                              Icons.delete,
+                              color: Colors.white,
+                              size: 32,
+                            ),
+                          ),
 
-  secondaryBackground: Container(
-    alignment: Alignment.centerRight,
-    padding: const EdgeInsets.symmetric(horizontal: 20),
-    decoration: BoxDecoration(
-      color: Colors.blue.shade600,
-      borderRadius: BorderRadius.circular(16),
-    ),
-    child: const Icon(
-      Icons.edit,
-      color: Colors.white,
-      size: 32,
-    ),
-  ),
+                          secondaryBackground: Container(
+                            alignment: Alignment.centerRight,
+                            padding: const EdgeInsets.symmetric(horizontal: 20),
+                            decoration: BoxDecoration(
+                              color: Colors.yellow.shade600,
+                              borderRadius: BorderRadius.circular(16),
+                            ),
+                            child: const Icon(
+                              Icons.star,
+                              color: Colors.white,
+                              size: 32,
+                            ),
+                          ),
 
-  confirmDismiss: (direction) async {
-    // DELETE
-    if (direction == DismissDirection.startToEnd) {
-      final confirm = await showDialog<bool>(
-        context: context,
-        builder: (_) => AlertDialog(
-          title: const Text("Delete Habit"),
-          content: Text(
-            "Delete '${habit.title}'?",
-          ),
-          actions: [
-            TextButton(
-              onPressed: () =>
-                  Navigator.pop(context, false),
-              child: const Text("Cancel"),
-            ),
-            FilledButton(
-              onPressed: () =>
-                  Navigator.pop(context, true),
-              child: const Text("Delete"),
-            ),
-          ],
-        ),
-      );
+                          confirmDismiss: (direction) async {
+                            // DELETE
+                            if (direction == DismissDirection.startToEnd) {
+                              final confirm = await showDialog<bool>(
+                                context: context,
+                                builder: (_) => AlertDialog(
+                                  title: const Text("Delete Habit"),
+                                  content: Text("Delete '${habit.title}'?"),
+                                  actions: [
+                                    TextButton(
+                                      onPressed: () =>
+                                          Navigator.pop(context, false),
+                                      child: const Text("Cancel"),
+                                    ),
+                                    FilledButton(
+                                      onPressed: () =>
+                                          Navigator.pop(context, true),
+                                      child: const Text("Delete"),
+                                    ),
+                                  ],
+                                ),
+                              );
 
-      if (confirm == true) {
-        await habit.delete();
-        return true;
-      }
+                              if (confirm == true) {
+                                await habit.delete();
+                                return true;
+                              }
 
-      return false;
-    }
+                              return false;
+                            }
 
-    // EDIT
-    if (direction == DismissDirection.endToStart) {
-      await showDialog(
-        context: context,
-        builder: (_) =>
-            EditHabitDialog(habit: habit),
-      );
+                            // EDIT
+                            if (direction == DismissDirection.endToStart) {
+                              final confirm = await showDialog<bool>(
+                                context: context,
+                                builder: (_) => AlertDialog(
+                                  title: const Text("Move to Journeys?"),
+                                  content: Text(
+                                    "Move '${habit.title}' to Journeys?\n\n"
+                                    "It will become read-only and no longer affect streaks or analytics.",
+                                  ),
+                                  actions: [
+                                    TextButton(
+                                      onPressed: () =>
+                                          Navigator.pop(context, false),
+                                      child: const Text("Cancel"),
+                                    ),
+                                    FilledButton(
+                                      onPressed: () =>
+                                          Navigator.pop(context, true),
+                                      child: const Text("Move"),
+                                    ),
+                                  ],
+                                ),
+                              );
 
-      return false;
-    }
+                              if (confirm == true) {
+                                habit.isAchieved = true;
+                                habit.achievedAt = DateTime.now();
 
-    return false;
-  },
+                                await habit.save();
 
-  child: Padding(
-    padding: const EdgeInsets.only(bottom: 2),
-    child: HabitCard(
-      title: habit.title,
-      subtitle: habit.category,
-      iconCodePoint: habit.iconCodePoint,
-      count: countForDay,
-      streak: streak,
-      completed: completedToday,
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                    content: Text(
+                                      "${habit.title} moved to Journeys!",
+                                    ),
+                                  ),
+                                );
 
-      onCountTap: () async {
-        habit.dailyCounts[dateKey] =
-            countForDay + 1;
-        await habit.save();
-      },
+                                return true;
+                              }
 
-      onCountLongPress: () async {
-        setState(() {
-          habit.dailyCounts[dateKey] = 0;
-        });
+                              return false;
+                            }
 
-        await habit.save();
-        Feedback.forLongPress(context);
-      },
-    ),
-  ),
-);
+                            return false;
+                          },
+
+                          child: Padding(
+                            padding: const EdgeInsets.only(bottom: 2),
+                            child: GestureDetector(
+                              onTap: () async {
+                                await showDialog(
+                                  context: context,
+                                  builder: (_) => EditHabitDialog(habit: habit),
+                                );
+                              },
+                              child: HabitCard(
+                                title: habit.title,
+                                subtitle: habit.category,
+                                iconCodePoint: habit.iconCodePoint,
+                                count: countForDay,
+                                streak: streak,
+                                completed: completedToday,
+
+                                onCountTap: () async {
+                                  habit.dailyCounts[dateKey] = countForDay + 1;
+                                  await habit.save();
+                                },
+
+                                onCountLongPress: () async {
+                                  setState(() {
+                                    habit.dailyCounts[dateKey] = 0;
+                                  });
+
+                                  await habit.save();
+                                  Feedback.forLongPress(context);
+                                },
+                              ),
+                            ),
+                          ),
+                        );
                       },
                     );
                   },

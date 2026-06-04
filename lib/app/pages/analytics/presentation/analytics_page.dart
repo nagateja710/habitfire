@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-
+import 'package:habitfire/app/utils/helper.dart';
 import 'package:habitfire/app/models/habit.dart';
 
 class AnalyticsPage extends StatelessWidget {
@@ -130,7 +130,9 @@ Widget statCard(
       body: ValueListenableBuilder(
         valueListenable: habitsBox.listenable(),
         builder: (context, Box<Habit> box, _) {
-          final habits = box.values.toList();
+          final allhabits = box.values.toList();
+          // final habits = box.values.toList();
+          final habits = HabitFilters.active(allhabits);
 
           if (habits.isEmpty) {
             return const Center(

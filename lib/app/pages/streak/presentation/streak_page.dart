@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import "package:habitfire/app/utils/iconcolors.dart";
 import '../../../models/habit.dart';
-
+import 'package:habitfire/app/utils/helper.dart';
 class StreaksPage extends StatelessWidget {
   const StreaksPage({super.key});
 
@@ -146,7 +146,7 @@ class StreaksPage extends StatelessWidget {
       body: ValueListenableBuilder(
         valueListenable: box.listenable(),
         builder: (context, Box<Habit> box, _) {
-          final habits = box.values.toList();
+          final habits = HabitFilters.active(box.values.toList());
 
           if (habits.isEmpty) {
             return const Center(
