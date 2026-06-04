@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:habitfire/app/app.dart';
+import 'package:habitfire/app/pages/about/presentation/about.dart';
 class UpperNav extends StatelessWidget implements PreferredSizeWidget {
   const UpperNav({super.key});
 
@@ -55,6 +56,10 @@ class UpperNav extends StatelessWidget implements PreferredSizeWidget {
       case 'settings':
         break;
       case 'about':
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => const AboutPage()),
+          );
         break;
     }
   },

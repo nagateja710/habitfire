@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-
+import 'package:habitfire/app/utils/edit_habit_dialog.dart';
 import 'package:habitfire/app/models/habit.dart';
 import 'package:habitfire/app/widgets/habit_card.dart';
 import 'package:habitfire/app/pages/addhabit/presentation/add_habit_page.dart';
@@ -271,40 +271,111 @@ class _HomePageState extends State<HomePage> {
                               habit,
                             );
 
-                        return Padding(
-                          padding:
-                              const EdgeInsets.only(
-                            bottom: 2,
-                          ),
-                          child: HabitCard(
-                            title: habit.title,
-                            subtitle:
-                                habit.category,
-                            iconCodePoint:
-                                habit
-                                    .iconCodePoint,
-                            count: countForDay,
-                            streak: streak,
-                            completed:
-                                completedToday,
-                            onCountTap:
-                                () async {
-                              habit.dailyCounts[
-                                      dateKey] =
-                                  countForDay +
-                                      1;
+return Dismissible(
+  key: ValueKey(habit.id),
 
-                              await habit.save();
-                            },
-                             onCountLongPress: () async {
-    setState(() {
-      habit.dailyCounts[dateKey] = 0;
-    });
-    await habit.save();
-    Feedback.forLongPress(context); // Optional subtle rumble feedback
+  background: Container(
+    alignment: Alignment.centerLeft,
+    padding: const EdgeInsets.symmetric(horizontal: 20),
+    decoration: BoxDecoration(
+      color: Colors.red.shade600,
+      borderRadius: BorderRadius.circular(16),
+    ),
+    child: const Icon(
+      Icons.delete,
+      color: Colors.white,
+      size: 32,
+    ),
+  ),
+
+  secondaryBackground: Container(
+    alignment: Alignment.centerRight,
+    padding: const EdgeInsets.symmetric(horizontal: 20),
+    decoration: BoxDecoration(
+      color: Colors.blue.shade600,
+      borderRadius: BorderRadius.circular(16),
+    ),
+    child: const Icon(
+      Icons.edit,
+      color: Colors.white,
+      size: 32,
+    ),
+  ),
+
+  confirmDismiss: (direction) async {
+    // DELETE
+    if (direction == DismissDirection.startToEnd) {
+      final confirm = await showDialog<bool>(
+        context: context,
+        builder: (_) => AlertDialog(
+          title: const Text("Delete Habit"),
+          content: Text(
+            "Delete '${habit.title}'?",
+          ),
+          actions: [
+            TextButton(
+              onPressed: () =>
+                  Navigator.pop(context, false),
+              child: const Text("Cancel"),
+            ),
+            FilledButton(
+              onPressed: () =>
+                  Navigator.pop(context, true),
+              child: const Text("Delete"),
+            ),
+          ],
+        ),
+      );
+
+      if (confirm == true) {
+        await habit.delete();
+        return true;
+      }
+
+      return false;
+    }
+
+    // EDIT
+    if (direction == DismissDirection.endToStart) {
+      await showDialog(
+        context: context,
+        builder: (_) =>
+            EditHabitDialog(habit: habit),
+      );
+
+      return false;
+    }
+
+    return false;
   },
-                          ),
-                        );
+
+  child: Padding(
+    padding: const EdgeInsets.only(bottom: 2),
+    child: HabitCard(
+      title: habit.title,
+      subtitle: habit.category,
+      iconCodePoint: habit.iconCodePoint,
+      count: countForDay,
+      streak: streak,
+      completed: completedToday,
+
+      onCountTap: () async {
+        habit.dailyCounts[dateKey] =
+            countForDay + 1;
+        await habit.save();
+      },
+
+      onCountLongPress: () async {
+        setState(() {
+          habit.dailyCounts[dateKey] = 0;
+        });
+
+        await habit.save();
+        Feedback.forLongPress(context);
+      },
+    ),
+  ),
+);
                       },
                     );
                   },

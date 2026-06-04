@@ -109,9 +109,28 @@ class _AddHabitPageState extends State<AddHabitPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Create Habit')),
+      appBar: AppBar(
+        title: const Text('Create Habit'),
+        actions: [
+          SizedBox(
+            height: 30,
+            width: 100,
+            child: FilledButton(
+              onPressed: saveHabit,
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: const [
+                  Icon(Icons.save),
+                  SizedBox(width: 4),
+                  Text('save', style: TextStyle(fontSize: 12)),
+                ],
+              ),
+            ),
+          ),
+        ],
+      ),
       body: Padding(
-        padding: const EdgeInsets.all(20),
+        padding: const EdgeInsets.all(10),
         child: ListView(
           children: [
             const Text(
@@ -119,7 +138,7 @@ class _AddHabitPageState extends State<AddHabitPage> {
               style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
             ),
 
-            const SizedBox(height: 12),
+            const SizedBox(height: 5),
 
             TextField(
               controller: nameController,
@@ -129,7 +148,7 @@ class _AddHabitPageState extends State<AddHabitPage> {
               ),
             ),
 
-            const SizedBox(height: 24),
+            const SizedBox(height: 15),
 
             const Text(
               'Category',
@@ -155,7 +174,7 @@ class _AddHabitPageState extends State<AddHabitPage> {
               },
             ),
 
-            const SizedBox(height: 24),
+            const SizedBox(height: 12),
 
             const Text(
               'Active Days',
@@ -164,46 +183,75 @@ class _AddHabitPageState extends State<AddHabitPage> {
 
             const SizedBox(height: 12),
 
-            Wrap(
-              spacing:2,
-              runSpacing: 8,
-              children: weekDays.map((day) {
-                final label = day.$1;
-                final value = day.$2;
+Wrap(
+  alignment: WrapAlignment.spaceEvenly,
+  spacing: 8,
+  runSpacing: 8,
+  children: weekDays.map((day) {
+    final label = day.$1;
+    final value = day.$2;
 
-                final selected = selectedDays.contains(value);
+    final selected = selectedDays.contains(value);
 
-                return FilterChip(
-                  showCheckmark: false,
-                  label: Text(
-                    label,
-                    style: TextStyle(
-                      color: selected ? Colors.white : Colors.grey.shade700,
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
-                  selected: selected,
-                  selectedColor: Colors.green,
-                  backgroundColor: Colors.grey.shade200,
-                  side: BorderSide(
-                    color: selected ? Colors.green : Colors.grey.shade400,
-                  ),
-                  onSelected: (_) {
-                    setState(() {
-                      if (selected) {
-                        if (selectedDays.length > 1) {
-                          selectedDays.remove(value);
-                        }
-                      } else {
-                        selectedDays.add(value);
-                      }
-                    });
-                  },
-                );
-              }).toList(),
+    return GestureDetector(
+      onTap: () {
+        setState(() {
+          if (selected) {
+            if (selectedDays.length > 1) {
+              selectedDays.remove(value);
+            }
+          } else {
+            selectedDays.add(value);
+          }
+        });
+      },
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 200),
+        width: 42,
+        padding: const EdgeInsets.symmetric(vertical: 6),
+        decoration: BoxDecoration(
+          
+          borderRadius: BorderRadius.circular(12),
+          color: selected
+              ? Colors.orange.withOpacity(0.12)
+              : Colors.transparent,
+        ),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(
+              label,
+              style: TextStyle(
+                fontSize: 12,
+                fontWeight: FontWeight.bold,
+                color: selected
+                    ? Colors.orange
+                    : Colors.grey,
+              ),
             ),
 
-            const SizedBox(height: 24),
+            const SizedBox(height: 4),
+
+            AnimatedScale(
+              duration: const Duration(milliseconds: 200),
+              scale: selected ? 1.15 : 1,
+              child: Icon(
+                selected
+                    ? Icons.local_fire_department
+                    : Icons.local_fire_department_outlined,
+                color: selected
+                    ? Colors.deepOrange
+                    : Colors.grey.shade400,
+                size: 28,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }).toList(),
+),
+            const SizedBox(height: 12),
 
             const Text(
               'Choose Icon',
@@ -242,20 +290,20 @@ class _AddHabitPageState extends State<AddHabitPage> {
               },
             ),
 
-            const SizedBox(height: 30),
+            const SizedBox(height: 12),
 
-            SizedBox(
-              height: 50,
-              child: FilledButton(
-                onPressed: saveHabit,
-                child: const Text(
-                  'Create Habit',
-                  style: TextStyle(fontSize: 16),
-                ),
-              ),
-            ),
+            // SizedBox(
+            //   height: 50,
+            //   child: FilledButton(
+            //     onPressed: saveHabit,
+            //     child: const Text(
+            //       'Create Habit',
+            //       style: TextStyle(fontSize: 16),
+            //     ),
+            //   ),
+            // ),
 
-            const SizedBox(height: 30),
+            // const SizedBox(height: 30),
           ],
         ),
       ),
