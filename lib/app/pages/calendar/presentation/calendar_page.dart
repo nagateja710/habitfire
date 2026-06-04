@@ -135,7 +135,7 @@ class _CalendarPageState extends State<CalendarPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text("Calendar")),
+      appBar: AppBar(  backgroundColor: Colors.transparent,title: const Text("Calendar")),
       body: ValueListenableBuilder(
         valueListenable: habitsBox.listenable(),
         builder: (context, Box<Habit> box, _) {
