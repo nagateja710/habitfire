@@ -9,19 +9,17 @@ class MainNavigationPage extends StatefulWidget {
   const MainNavigationPage({super.key});
 
   @override
-  State<MainNavigationPage> createState() =>
-      _MainNavigationPageState();
+  State<MainNavigationPage> createState() => _MainNavigationPageState();
 }
 
-class _MainNavigationPageState
-    extends State<MainNavigationPage> {
+class _MainNavigationPageState extends State<MainNavigationPage> {
   int currentIndex = 0;
 
   final pages = const [
     HomePage(),
+    CalendarPage(),
     StreaksPage(),
     AnalyticsPage(),
-    CalendarPage(),
   ];
 
   @override
@@ -42,6 +40,11 @@ class _MainNavigationPageState
             label: 'Home',
           ),
           NavigationDestination(
+            icon: Icon(Icons.calendar_month_outlined),
+            selectedIcon: Icon(Icons.calendar_month),
+            label: 'Calendar',
+          ),
+          NavigationDestination(
             icon: Icon(Icons.local_fire_department_outlined),
             selectedIcon: Icon(Icons.local_fire_department),
             label: 'Streaks',
@@ -50,11 +53,6 @@ class _MainNavigationPageState
             icon: Icon(Icons.bar_chart_outlined),
             selectedIcon: Icon(Icons.bar_chart),
             label: 'Analytics',
-          ),
-          NavigationDestination(
-            icon: Icon(Icons.calendar_month_outlined),
-            selectedIcon: Icon(Icons.calendar_month),
-            label: 'Calendar',
           ),
         ],
       ),

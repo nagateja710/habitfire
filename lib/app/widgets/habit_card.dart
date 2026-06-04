@@ -1,37 +1,5 @@
 import 'package:flutter/material.dart';
-
-final Map<int, Color> iconColorMap = {
-  Icons.water_drop.codePoint: Colors.blue,
-  Icons.fitness_center.codePoint: Colors.blueGrey,
-  Icons.book.codePoint: Colors.indigo,
-  Icons.self_improvement.codePoint: Colors.teal,
-  Icons.run_circle.codePoint: Colors.orange,
-  Icons.restaurant.codePoint: Colors.green,
-  Icons.local_fire_department.codePoint: Colors.deepOrange,
-  Icons.savings.codePoint: Colors.pink,
-  Icons.school.codePoint: Colors.purple,
-  Icons.work.codePoint: Colors.brown,
-  Icons.code.codePoint: Colors.cyan,
-  Icons.music_note.codePoint: Colors.deepPurple,
-  Icons.sports_soccer.codePoint: Colors.lightGreen,
-  Icons.bed.codePoint: Colors.indigoAccent,
-  Icons.favorite.codePoint: Colors.red,
-  Icons.star.codePoint: Colors.amber,
-  Icons.lightbulb.codePoint: Colors.yellow,
-  Icons.psychology.codePoint: Colors.purpleAccent,
-  Icons.spa.codePoint: Colors.tealAccent,
-  Icons.local_drink.codePoint: Colors.lightBlue,
-  Icons.directions_walk.codePoint: Colors.lime,
-  Icons.monitor_heart.codePoint: Colors.redAccent,
-  Icons.fastfood.codePoint: Colors.orangeAccent,
-  Icons.laptop.codePoint: Colors.grey,
-  Icons.timer.codePoint: Colors.red,
-  Icons.pets.codePoint: Colors.brown,
-  Icons.language.codePoint: Colors.cyanAccent,
-  Icons.travel_explore.codePoint: Colors.teal,
-  Icons.cleaning_services.codePoint: Colors.blueAccent,
-  Icons.check_circle.codePoint: Colors.green,
-};
+import 'package:habitfire/app/utils/iconcolors.dart';
 
 class HabitCard extends StatelessWidget {
   final String title;
@@ -41,7 +9,8 @@ class HabitCard extends StatelessWidget {
   final int streak;
   final bool completed;
   final VoidCallback onCountTap;
-  final VoidCallback onCountLongPress; // 1. Added the long press callback parameter
+  final VoidCallback
+  onCountLongPress; // 1. Added the long press callback parameter
 
   const HabitCard({
     super.key,
@@ -72,17 +41,20 @@ class HabitCard extends StatelessWidget {
                   width: 55,
                   height: 55,
                   decoration: BoxDecoration(
-                    border: Border.all(width: 2),
+                    border: Border.all(
+                      width: 2,
+                      color:
+                          iconColorMap[iconCodePoint]?.withOpacity(0.4) ??
+                          Colors.grey.shade300.withOpacity(0.4),
+                    ),
                     borderRadius: BorderRadius.circular(12),
+                    color:
+                        iconColorMap[iconCodePoint]?.withOpacity(0.12) ??
+                        Colors.grey.shade300.withOpacity(0.12),
                   ),
                   child: Icon(
-                    IconData(
-                      iconCodePoint,
-                      fontFamily: 'MaterialIcons',
-                    ),
-                    color:
-                        iconColorMap[iconCodePoint] ??
-                        Colors.grey,
+                    IconData(iconCodePoint, fontFamily: 'MaterialIcons'),
+                    color: iconColorMap[iconCodePoint] ?? Colors.grey,
                   ),
                 ),
 
@@ -90,13 +62,12 @@ class HabitCard extends StatelessWidget {
 
                 Expanded(
                   child: Column(
-                    crossAxisAlignment:
-                        CrossAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
                         title,
                         style: const TextStyle(
-                          fontSize: 24,
+                          fontSize: 18,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
@@ -104,7 +75,7 @@ class HabitCard extends StatelessWidget {
                         subtitle,
                         style: TextStyle(
                           color: Colors.grey.shade600,
-                          fontSize: 18,
+                          fontSize: 12,
                         ),
                       ),
                     ],
@@ -113,7 +84,8 @@ class HabitCard extends StatelessWidget {
 
                 GestureDetector(
                   onTap: onCountTap,
-                  onLongPress: onCountLongPress, // 3. Bound the long press event handler here
+                  onLongPress:
+                      onCountLongPress, // 3. Bound the long press event handler here
                   child: CircleAvatar(
                     radius: 28,
                     backgroundColor: count > 0
@@ -124,9 +96,7 @@ class HabitCard extends StatelessWidget {
                       style: TextStyle(
                         fontSize: 22,
                         fontWeight: FontWeight.bold,
-                        color: count > 0
-                            ? Colors.green
-                            : Colors.grey,
+                        color: count > 0 ? Colors.green : Colors.grey,
                       ),
                     ),
                   ),
@@ -141,10 +111,7 @@ class HabitCard extends StatelessWidget {
             top: 6,
             right: 80,
             child: Container(
-              padding: const EdgeInsets.symmetric(
-                horizontal: 8,
-                vertical: 4,
-              ),
+              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
               decoration: BoxDecoration(
                 color: Colors.orange.withOpacity(0.12),
                 borderRadius: BorderRadius.circular(20),

@@ -235,7 +235,7 @@ class _AddHabitPageState extends State<AddHabitPage> {
                   },
                   child: Card(
                     elevation: selected ? 4 : 1,
-                    color: selected ? Colors.lightGreenAccent : null,
+                    color: selected ? Colors.lightGreenAccent.shade200 : null,
                     child: Icon(iconItem.icon, color: iconItem.color, size: 30),
                   ),
                 );
