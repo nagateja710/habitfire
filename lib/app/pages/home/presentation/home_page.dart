@@ -274,20 +274,6 @@ class _HomePageState extends State<HomePage> {
                             alignment: Alignment.centerLeft,
                             padding: const EdgeInsets.symmetric(horizontal: 20),
                             decoration: BoxDecoration(
-                              color: Colors.red.shade600,
-                              borderRadius: BorderRadius.circular(16),
-                            ),
-                            child: const Icon(
-                              Icons.delete,
-                              color: Colors.white,
-                              size: 32,
-                            ),
-                          ),
-
-                          secondaryBackground: Container(
-                            alignment: Alignment.centerRight,
-                            padding: const EdgeInsets.symmetric(horizontal: 20),
-                            decoration: BoxDecoration(
                               color: Colors.yellow.shade600,
                               borderRadius: BorderRadius.circular(16),
                             ),
@@ -298,9 +284,23 @@ class _HomePageState extends State<HomePage> {
                             ),
                           ),
 
+                          secondaryBackground: Container(
+                            alignment: Alignment.centerRight,
+                            padding: const EdgeInsets.symmetric(horizontal: 20),
+                            decoration: BoxDecoration(
+                              color: Colors.red.shade600,
+                              borderRadius: BorderRadius.circular(16),
+                            ),
+                            child: const Icon(
+                              Icons.delete,
+                              color: Colors.white,
+                              size: 32,
+                            ),
+                          ),
+
                           confirmDismiss: (direction) async {
                             // DELETE
-                            if (direction == DismissDirection.startToEnd) {
+                            if (direction == DismissDirection.endToStart) {
                               final confirm = await showDialog<bool>(
                                 context: context,
                                 builder: (_) => AlertDialog(
@@ -330,7 +330,7 @@ class _HomePageState extends State<HomePage> {
                             }
 
                             // EDIT
-                            if (direction == DismissDirection.endToStart) {
+                            if (direction == DismissDirection.startToEnd) {
                               final confirm = await showDialog<bool>(
                                 context: context,
                                 builder: (_) => AlertDialog(

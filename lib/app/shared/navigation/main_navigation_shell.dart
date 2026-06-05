@@ -4,7 +4,7 @@ import '../../pages/home/presentation/home_page.dart';
 import '../../pages/streak/presentation/streak_page.dart';
 import '../../pages/analytics/presentation/analytics_page.dart';
 import '../../pages/calendar/presentation/calendar_page.dart';
-import '../../pages/achivements/presentation/achivements_page.dart';
+import '../../pages/journeys/presentation/journeys_page.dart';
 
 class MainNavigationPage extends StatefulWidget {
   const MainNavigationPage({super.key});

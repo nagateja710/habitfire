@@ -1,11 +1,100 @@
 # 🔥 HabitFire
 
-**HabitFire** is a modern Flutter habit-tracking application built to help users develop consistency, maintain streaks, and visualize progress through powerful analytics. With a clean dark-themed UI, streak tracking, calendar history, import/export support, and habit scheduling, HabitFire makes habit building simple and motivating.
+A modern offline-first habit tracking application built with Flutter and Hive, designed to help users build consistency, maintain streaks, analyze progress, and preserve completed habit journeys.
+
+HabitFire combines habit tracking, streak management, analytics, calendar visualization, and a unique **Journeys** system that allows users to archive completed habits instead of deleting them.
+
+---
+
+## ✨ Features
+
+### 🏠 Habit Management
+
+* Create and manage habits
+* Custom habit names and categories
+* Choose active days of the week
+* Large built-in icon library
+* Edit habits anytime
+* Delete habits with confirmation
+* Multiple logs per day
+* Daily completion tracking
+
+### 🔥 Streak Tracking
+
+Track consistency across all habits with:
+
+* Current streaks
+* Best streaks
+* Streak leaders
+* Peak performance records
+* Daily averages
+* Habit performance comparisons
+
+### 📅 Calendar View
+
+Visualize your progress using an interactive calendar.
+
+* Monthly, bi-weekly, and weekly views
+* Fire-based progress heatmap
+* Daily completion percentage
+* Historical habit tracking
+* Completed and missed habit breakdowns
+
+### 📊 Analytics Dashboard
+
+Gain insights into your productivity.
+
+* Total habits
+* Scheduled habits today
+* Daily completion rate
+* Combined streak count
+* Best streak record
+* Most consistent habit
+
+### 🏆 Journeys System
+
+HabitFire introduces a unique concept called **Journeys**.
+
+Instead of deleting completed habits, users can retire them into a dedicated archive.
+
+Journey statistics include:
+
+* Start date
+* Finish date
+* Duration
+* Completion rate
+* Total logs
+* Best streak
+* Category information
+
+This allows users to preserve their accomplishments while keeping active habits organized.
+
+### 💾 Backup & Restore
+
+* Export habit data
+* Import backups
+* Local data persistence
+* Reset all data
+
+### 🎨 Modern UI
+
+* Material 3 design
+* Dark mode support
+* Responsive layouts
+* Clean card-based interface
+* Custom icon system
+
+### ℹ️ About Page
+
+* Application statistics
+* Tracking summary
+* Version information
+* GitHub repository access
+* Developer information
 
 ---
 
 ## 📱 Screenshots
-
 <h2 align="center">📱 App Screenshots</h2>
 
 <p align="center">
@@ -13,81 +102,27 @@
   <img src="assets/screenshots/calendar.jpg" width="180"/>
   <img src="assets/screenshots/streaks.jpg" width="180"/>
   <img src="assets/screenshots/analytics.jpg" width="180"/>
+  <img scr="assets/screenshots/Journeys.jpg" width="180"/>
+  
 </p>
 
 ---
 
-## ✨ Features
+## 🛠️ Tech Stack
 
-### 📝 Habit Management
-- Create, edit, and delete habits
-- Custom habit icons
-- Category-based organization
-- Custom colors for icons
-- Daily habit tracking
-- Habit scheduling by weekdays
-- Swipe-to-delete support
-
-### 🔥 Streak System
-- Current streak tracking
-- Best streak records
-- Combined streak statistics
-- Streak leader insights
-- Personal records per habit
-- Daily average calculations
-
-### 📅 Calendar Tracking
-- Monthly habit overview
-- Daily completion history
-- Progress percentage visualization
-- Habit completion details for any date
-- Visual streak heatmap using fire indicators
-
-### 📊 Analytics Dashboard
-- Total habits
-- Habits scheduled today
-- Completion rate
-- Completed habits today
-- Combined streaks
-- Best streak achieved
-- Most consistent habit
-- Category breakdown
-- Performance statistics
-
-### 🌙 Theme Support
-- Dark Mode
-- Light Mode
-- Theme toggle support
-
-### 💾 Backup & Restore
-- Export all habits and progress
-- Import backup data
-- Easy migration between devices
-
-### ℹ️ Additional Pages
-- About Page
-- App Information
-- Feature Overview
-
-### 🎨 User Experience
-- Smooth animations
-- Motivational splash quotes
-- Modern dark UI
-- Material Design
-- Responsive layouts
-
----
-
-## 🏗️ Tech Stack
-
-| Technology | Usage |
-|------------|--------|
-| Flutter | Cross-platform framework |
-| Dart | Programming language |
-| Hive | Local database |
-| Hive Generator | Type adapters |
-| Build Runner | Code generation |
-| Material Design | UI framework |
+| Technology            | Purpose                      |
+| --------------------- | ---------------------------- |
+| Flutter               | Cross-platform UI framework  |
+| Dart                  | Programming language         |
+| Hive                  | Local database               |
+| Hive Flutter          | Flutter integration for Hive |
+| Table Calendar        | Calendar visualization       |
+| File Picker           | Backup import/export         |
+| Share Plus            | Sharing exported files       |
+| Path Provider         | File system access           |
+| Package Info Plus     | App version information      |
+| URL Launcher          | External links               |
+| Flutter Native Splash | Splash screen generation     |
 
 ---
 
@@ -108,39 +143,19 @@ lib/
     │   └── habit.g.dart
     │
     ├── pages/
-    │   │
     │   ├── home/
-    │   │   └── presentation/
-    │   │       └── home_page.dart
-    │   │
     │   ├── addhabit/
-    │   │   └── presentation/
-    │   │       └── add_habit_page.dart
-    │   │
     │   ├── calendar/
-    │   │   └── presentation/
-    │   │       └── calendar_page.dart
-    │   │
     │   ├── streak/
-    │   │   └── presentation/
-    │   │       └── streak_page.dart
-    │   │
     │   ├── analytics/
-    │   │   └── presentation/
-    │   │       └── analytics_page.dart
-    │   │
+    │   ├── journeys/
     │   └── about/
-    │       └── presentation/
-    │           └── about.dart
     │
     ├── shared/
     │   └── navigation/
-    │       ├── main_navigation_shell.dart
-    │       └── upper_nav.dart
     │
     ├── widgets/
-    │   ├── habit_card.dart
-    │   └── navup.dart
+    │   └── habit_card.dart
     │
     └── utils/
         ├── backup_service.dart
@@ -150,88 +165,28 @@ lib/
 
 ---
 
-## 🔥 Habit Model
-
-Each habit contains:
-
-```dart
-String id;
-String title;
-String category;
-int iconCodePoint;
-DateTime createdAt;
-
-Map<String, int> dailyCounts;
-List<int> weekDays;
-```
-
-### Weekday Scheduling
-
-```dart
-[1,2,3,4,5]
-```
-
-Represents:
-
-```text
-1 = Monday
-2 = Tuesday
-3 = Wednesday
-4 = Thursday
-5 = Friday
-6 = Saturday
-7 = Sunday
-```
-
-Examples:
-
-| Habit | Schedule |
-|---------|----------|
-| Gym | Mon-Sat |
-| Cricket | Sat-Sun |
-| Water Drink | Everyday |
-
----
-
-## 📈 Analytics Provided
-
-HabitFire automatically calculates:
-
-- Current streak
-- Best streak
-- Combined streak
-- Completion percentage
-- Scheduled habits today
-- Completed habits today
-- Most consistent habit
-- Category statistics
-- Personal records
-- Daily averages
-
----
-
 ## 🚀 Getting Started
 
-### Clone Repository
+### Prerequisites
+
+* Flutter SDK
+* Dart SDK
+* Android Studio or VS Code
+* Android Emulator or Physical Device
+
+### Installation
 
 ```bash
-git clone https://github.com/yourusername/habitfire.git
-cd habitfire
+git clone https://github.com/nagateja710/habitfire.git
 ```
 
-### Install Dependencies
+```bash
+cd habitfire
+```
 
 ```bash
 flutter pub get
 ```
-
-### Generate Hive Adapters
-
-```bash
-flutter pub run build_runner build --delete-conflicting-outputs
-```
-
-### Run Application
 
 ```bash
 flutter run
@@ -239,62 +194,62 @@ flutter run
 
 ---
 
-## 📦 Main Dependencies
+## 📦 Dependencies
+
+Core packages used:
 
 ```yaml
-dependencies:
-  flutter:
-  hive:
-  hive_flutter:
-  file_picker:
-  path_provider:
-
-dev_dependencies:
-  build_runner:
-  hive_generator:
+hive
+hive_flutter
+table_calendar
+file_picker
+path_provider
+share_plus
+package_info_plus
+url_launcher
+flutter_native_splash
 ```
 
 ---
 
-## 💡 Future Improvements
+## 🎯 Key Concepts
 
-- Local notifications
-- Reminder system
-- Habit goals
-- Achievement badges
-- Heatmap analytics
-- Cloud sync
-- Google Sign In
-- Data synchronization across devices
-- Widgets for Android & iOS
-- CSV export
+### Habit
+
+An active task that can be tracked daily.
+
+Examples:
+
+* Drink Water
+* Exercise
+* Read Books
+* Wake Up Early
+
+### Streak
+
+Consecutive scheduled days with successful completion.
+
+### Peak
+
+Highest number of logs recorded in a single day.
+
+### Journey
+
+A completed habit that has been retired and archived for future reference.
 
 ---
 
-## 🤝 Contributing
+## 🔮 Future Improvements
 
-Contributions are welcome.
-
-1. Fork the repository
-2. Create a new branch
-
-```bash
-git checkout -b feature/new-feature
-```
-
-3. Commit changes
-
-```bash
-git commit -m "Add awesome feature"
-```
-
-4. Push changes
-
-```bash
-git push origin feature/new-feature
-```
-
-5. Open a Pull Request
+* Achievement badges
+* Habit reminders
+* Cloud backup
+* Data synchronization
+* Advanced analytics
+* Charts and graphs
+* Habit templates
+* Goal tracking
+* Widgets support
 
 ---
 
@@ -302,16 +257,18 @@ git push origin feature/new-feature
 
 **Naga Teja**
 
-Built using Flutter to help users build strong habits, maintain consistency, and achieve long-term goals.
+GitHub:
+https://github.com/nagateja710
+
+Project Repository:
+https://github.com/nagateja710/habitfire
 
 ---
 
-## 📜 License
+## 📄 License
 
-MIT License
+This project is licensed under the MIT License.
 
 ---
 
-> "Success is the product of daily habits—not once-in-a-lifetime transformations."
-
-🔥 **Build Habits. Track Progress. Keep the Fire Alive.**
+### 🔥 Keep the fire burning.

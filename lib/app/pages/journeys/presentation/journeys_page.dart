@@ -126,21 +126,6 @@ class AchievementsPage extends StatelessWidget {
                         alignment: Alignment.centerLeft,
                         padding: const EdgeInsets.symmetric(horizontal: 20),
                         decoration: BoxDecoration(
-                          color: Colors.green.shade600,
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                        child: const Icon(
-                          Icons.restore_rounded,
-                          color: Colors.white,
-                          size: 32,
-                        ),
-                      ),
-
-                      // DELETE
-                      secondaryBackground: Container(
-                        alignment: Alignment.centerRight,
-                        padding: const EdgeInsets.symmetric(horizontal: 20),
-                        decoration: BoxDecoration(
                           color: Colors.red.shade600,
                           borderRadius: BorderRadius.circular(12),
                         ),
@@ -151,9 +136,24 @@ class AchievementsPage extends StatelessWidget {
                         ),
                       ),
 
+                      // DELETE
+                      secondaryBackground: Container(
+                        alignment: Alignment.centerRight,
+                        padding: const EdgeInsets.symmetric(horizontal: 20),
+                        decoration: BoxDecoration(
+                          color: Colors.green.shade600,
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        child: const Icon(
+                          Icons.restore_rounded,
+                          color: Colors.white,
+                          size: 32,
+                        ),
+                      ),
+
                       confirmDismiss: (direction) async {
                         // RESTORE TO ACTIVE
-                        if (direction == DismissDirection.startToEnd) {
+                        if (direction == DismissDirection.endToStart) {
                           final confirm = await showDialog<bool>(
                             context: context,
                             builder: (_) => AlertDialog(
@@ -188,7 +188,7 @@ class AchievementsPage extends StatelessWidget {
                         }
 
                         // DELETE FOREVER
-                        if (direction == DismissDirection.endToStart) {
+                        if (direction == DismissDirection.startToEnd) {
                           final confirm = await showDialog<bool>(
                             context: context,
                             builder: (_) => AlertDialog(
@@ -565,7 +565,8 @@ double _completionRate(Habit habit) {
 
   if (duration == 0) return 0;
 
-  final completions = _totalCompletions(habit);
+//unique days with completions
+  final completions = habit.dailyCounts.values.where((v) => v > 0).length;
 
   return ((completions / duration) * 100).clamp(0, 100);
 }
