@@ -101,7 +101,7 @@ This allows users to preserve their accomplishments while keeping active habits 
   <img src="assets/screenshots/home.jpg" width="180"/>
   <img src="assets/screenshots/calendar.jpg" width="180"/>
   <img src="assets/screenshots/streaks.jpg" width="180"/>
-  <img src="assets/screenshots/journeys.jpg" width="180"/>
+  <img src="assets/screenshots/Journeys.jpg" width="180"/>
   
 </p>
 
