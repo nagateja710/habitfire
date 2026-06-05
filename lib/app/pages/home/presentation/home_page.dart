@@ -401,7 +401,8 @@ class _HomePageState extends State<HomePage> {
 
                                 onCountLongPress: () async {
                                   setState(() {
-                                    habit.dailyCounts[dateKey] = 0;
+                                    // habit.dailyCounts[dateKey] = 0;
+                                    habit.dailyCounts.remove(dateKey);
                                   });
 
                                   await habit.save();
