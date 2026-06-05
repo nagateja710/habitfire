@@ -29,11 +29,13 @@ class _AddHabitPageState extends State<AddHabitPage> {
   final categories = const [
     'Health',
     'Fitness',
-    'Study',
+    'Social',
+    'Productivity',
+    'Learning',  
     'Work',
     'Reading',
-    'Meditation',
-    'Nutrition',
+    'Mindfulness',
+    'Creativity',
     'Finance',
     'Personal',
     'Other',
@@ -62,7 +64,7 @@ class _AddHabitPageState extends State<AddHabitPage> {
     HabitIcon(Icons.work, Colors.brown),
     HabitIcon(Icons.code, Colors.blueGrey),
     HabitIcon(Icons.music_note, Colors.pink),
-    HabitIcon(Icons.sports_soccer, Colors.green),
+    HabitIcon(Icons.sports_cricket_outlined, Colors.green),
     HabitIcon(Icons.bed, Colors.deepPurple),
     HabitIcon(Icons.favorite, Colors.red),
     HabitIcon(Icons.star, Colors.amber),
@@ -71,7 +73,7 @@ class _AddHabitPageState extends State<AddHabitPage> {
     HabitIcon(Icons.spa, Colors.green),
     HabitIcon(Icons.local_drink, Colors.cyan),
     HabitIcon(Icons.directions_walk, Colors.orange),
-    HabitIcon(Icons.monitor_heart, Colors.red),
+    HabitIcon(Icons.health_and_safety_outlined, Colors.green),
     HabitIcon(Icons.fastfood, Colors.deepOrange),
     HabitIcon(Icons.laptop, Colors.blueGrey),
     HabitIcon(Icons.timer, Colors.indigo),
@@ -81,7 +83,38 @@ class _AddHabitPageState extends State<AddHabitPage> {
     HabitIcon(Icons.cleaning_services, Colors.cyan),
     HabitIcon(Icons.check_circle, Colors.green),
   ];
-
+  final label = [
+    'Water',
+    'Fitness',
+    'Book',
+    'Meditation',
+    'Running',
+    'Food',
+    'Trending',
+    'Savings',
+    'Study',
+    'Work',
+    'Code',
+    'Music',
+    'games',
+    'Sleep',
+    'Love',
+    'Favorite',
+    'Idea',
+    'Psychology',
+    'Nature',
+    'Drink',
+    'Walk',
+    'Health',
+    'Food',
+    'Laptop',
+    'Timer',
+    'Pets',
+    'Language',
+    'Travel',
+    'Cleaning',
+    'Check',
+  ];
   Future<void> saveHabit() async {
     if (nameController.text.trim().isEmpty) {
       return;
@@ -183,74 +216,71 @@ class _AddHabitPageState extends State<AddHabitPage> {
 
             const SizedBox(height: 12),
 
-Wrap(
-  alignment: WrapAlignment.spaceEvenly,
-  spacing: 8,
-  runSpacing: 8,
-  children: weekDays.map((day) {
-    final label = day.$1;
-    final value = day.$2;
+            Wrap(
+              alignment: WrapAlignment.spaceEvenly,
+              spacing: 8,
+              runSpacing: 8,
+              children: weekDays.map((day) {
+                final label = day.$1;
+                final value = day.$2;
 
-    final selected = selectedDays.contains(value);
+                final selected = selectedDays.contains(value);
 
-    return GestureDetector(
-      onTap: () {
-        setState(() {
-          if (selected) {
-            if (selectedDays.length > 1) {
-              selectedDays.remove(value);
-            }
-          } else {
-            selectedDays.add(value);
-          }
-        });
-      },
-      child: AnimatedContainer(
-        duration: const Duration(milliseconds: 200),
-        width: 42,
-        padding: const EdgeInsets.symmetric(vertical: 6),
-        decoration: BoxDecoration(
-          
-          borderRadius: BorderRadius.circular(12),
-          color: selected
-              ? Colors.orange.withOpacity(0.12)
-              : Colors.transparent,
-        ),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Text(
-              label,
-              style: TextStyle(
-                fontSize: 12,
-                fontWeight: FontWeight.bold,
-                color: selected
-                    ? Colors.orange
-                    : Colors.grey,
-              ),
+                return GestureDetector(
+                  onTap: () {
+                    setState(() {
+                      if (selected) {
+                        if (selectedDays.length > 1) {
+                          selectedDays.remove(value);
+                        }
+                      } else {
+                        selectedDays.add(value);
+                      }
+                    });
+                  },
+                  child: AnimatedContainer(
+                    duration: const Duration(milliseconds: 200),
+                    width: 42,
+                    padding: const EdgeInsets.symmetric(vertical: 6),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(12),
+                      color: selected
+                          ? Colors.orange.withOpacity(0.12)
+                          : Colors.transparent,
+                    ),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Text(
+                          label,
+                          style: TextStyle(
+                            fontSize: 12,
+                            fontWeight: FontWeight.bold,
+                            color: selected ? Colors.orange : Colors.grey,
+                          ),
+                        ),
+
+                        const SizedBox(height: 4),
+
+                        AnimatedScale(
+                          duration: const Duration(milliseconds: 200),
+                          scale: selected ? 1.15 : 1,
+                          child: Icon(
+                            selected
+                                ? Icons.local_fire_department
+                                : Icons.local_fire_department_outlined,
+                            color: selected
+                                ? Colors.deepOrange
+                                : Colors.grey.shade400,
+                            size: 28,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                );
+              }).toList(),
             ),
-
-            const SizedBox(height: 4),
-
-            AnimatedScale(
-              duration: const Duration(milliseconds: 200),
-              scale: selected ? 1.15 : 1,
-              child: Icon(
-                selected
-                    ? Icons.local_fire_department
-                    : Icons.local_fire_department_outlined,
-                color: selected
-                    ? Colors.deepOrange
-                    : Colors.grey.shade400,
-                size: 28,
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }).toList(),
-),
             const SizedBox(height: 12),
 
             const Text(
@@ -284,7 +314,19 @@ Wrap(
                   child: Card(
                     elevation: selected ? 4 : 1,
                     color: selected ? Colors.lightGreenAccent.shade200 : null,
-                    child: Icon(iconItem.icon, color: iconItem.color, size: 30),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(iconItem.icon, color: iconItem.color, size: 30),
+                        Text(
+                          label[index],
+                          style: TextStyle(
+                            fontSize: 11,
+                            color: selected ? Colors.black : Colors.grey,
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                 );
               },
