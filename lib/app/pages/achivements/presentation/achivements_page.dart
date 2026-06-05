@@ -27,6 +27,26 @@ DateTime _actualStartDate(Habit habit) {
   return dates.first;
 }
 
+DateTime _actualEndDate(Habit habit) {
+  if (habit.dailyCounts.isEmpty) {
+    return habit.createdAt;
+  }
+
+  final dates = habit.dailyCounts.entries.where((e) => e.value > 0).map((e) {
+    final p = e.key.split('-');
+
+    return DateTime(int.parse(p[0]), int.parse(p[1]), int.parse(p[2]));
+  }).toList();
+
+  if (dates.isEmpty) {
+    return habit.createdAt;
+  }
+
+  dates.sort();
+
+  return dates.last;
+}
+
 Widget _infoTile(IconData icon, String label, String value) {
   return Container(
     margin: const EdgeInsets.symmetric(horizontal: 4),
@@ -528,7 +548,8 @@ class _EmptyState extends StatelessWidget {
 int _durationDays(Habit habit) {
   if (habit.achievedAt == null) return 0;
   final startDate = _actualStartDate(habit);
-  return habit.achievedAt!.difference(startDate).inDays + 1;
+  final endDate = _actualEndDate(habit).isBefore(habit.achievedAt!) ? _actualEndDate(habit) : habit.achievedAt!;
+  return endDate.difference(startDate).inDays + 1;
   // return habit.achievedAt!
   //         .difference(habit.createdAt)
   //         .inDays +

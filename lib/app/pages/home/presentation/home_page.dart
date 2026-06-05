@@ -7,6 +7,10 @@ import 'package:habitfire/app/widgets/habit_card.dart';
 import 'package:habitfire/app/pages/addhabit/presentation/add_habit_page.dart';
 import 'package:habitfire/app/utils/helper.dart';
 import 'package:intl/intl.dart';
+import 'dart:async'; // Ensure this import is at the top of your file
+
+Timer? _swipeHoldTimer;
+bool _isThrottled = false; // Prevents the initial swipe from jumping multiple days instantly
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
 
@@ -115,65 +119,110 @@ class _HomePageState extends State<HomePage> {
                   ),
 
                   const SizedBox(width: 12),
-
                   Expanded(
-                    child: OutlinedButton(
-                      onPressed: () {
-                        setState(() {
-                          selectedDate = DateTime.now();
-                        });
-                      },
-                      child: 
-                      isToday() ?
-                      RichText(
-                        text: TextSpan(
-                          style: DefaultTextStyle.of(context).style,
-                          children: [
-                            const TextSpan(
-                              text: "Today",
-                              style: TextStyle(
-                                fontSize: 18,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                            TextSpan(
-                              text:
-                                  " ${DateFormat(", EEE").format(selectedDate)}",
-                              style: TextStyle(
-                                fontSize: 12,
-                                color:
-                                    Theme.of(context).colorScheme.onSurfaceVariant,
-                              ),
-                            ),
-                          ],
-                        ),
-                      )
-    : RichText(
-        text: TextSpan(
-          style: DefaultTextStyle.of(context).style,
-          children: [
-            TextSpan(
-              text: DateFormat("d MMMM, yyyy").format(selectedDate),
-              style: const TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            TextSpan(
-              text: " ${DateFormat("EEE").format(selectedDate)}",
-              style: TextStyle(
-                fontSize: 12,
-                color: Theme.of(context).colorScheme.onSurfaceVariant,
-              ),
-            ),
-          ],
-        ),
-      )
-                    
+  child: GestureDetector(
+    onHorizontalDragUpdate: (details) {
+      // 1. Determine direction based on delta (positive = right, negative = left)
+      bool isSwipingRight = details.delta.dx > 0;
+      bool isSwipingLeft = details.delta.dx < 0;
+
+      // 2. Only start the timer if it isn't already running
+      if (_swipeHoldTimer == null) {
+        
+        // Define the repeating action
+        void tickDate() {
+          DateTime today = DateTime.now();
+          
+          if (isSwipingRight) {
+            // Swipe & Hold Right -> Continuously go to PREVIOUS day
+            setState(() {
+              selectedDate = selectedDate.subtract(const Duration(days: 1));
+            });
+          } else if (isSwipingLeft) {
+            // Swipe & Hold Left -> Continuously go to NEXT day (Max = Today)
+            DateTime nextDay = selectedDate.add(const Duration(days: 1));
+            
+            if (nextDay.isBefore(today) || 
+                (nextDay.year == today.year && nextDay.month == today.month && nextDay.day == today.day)) {
+              setState(() {
+                selectedDate = nextDay;
+              });
+            } else {
+              // If we reached today, stop the timer early
+              _swipeHoldTimer?.cancel();
+              _swipeHoldTimer = null;
+            }
+          }
+        }
+
+        // Trigger the first day change immediately upon swipe
+        tickDate(); 
+
+        // Start repeating every 300 milliseconds while finger is held down
+        // Adjust the Duration (e.g., 200ms for faster, 400ms for slower) to change scrolling speed
+        _swipeHoldTimer = Timer.periodic(const Duration(milliseconds: 200), (timer) {
+          tickDate();
+        });
+      }
+    },
+    onHorizontalDragEnd: (details) {
+      // 3. IMPORTANT: Stop the continuous ticking as soon as the finger lifts
+      _swipeHoldTimer?.cancel();
+      _swipeHoldTimer = null;
+    },
+    child: OutlinedButton(
+      onPressed: () {
+        setState(() {
+          selectedDate = DateTime.now();
+        });
+      },
+      child: isToday()
+          ? RichText(
+              text: TextSpan(
+                style: DefaultTextStyle.of(context).style,
+                children: [
+                  const TextSpan(
+                    text: "Today",
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
                     ),
                   ),
-
-                  const SizedBox(width: 12),
+                  TextSpan(
+                    text: " ${DateFormat(", EEE").format(selectedDate)}",
+                    style: TextStyle(
+                      fontSize: 12,
+                      color: Theme.of(context).colorScheme.onSurfaceVariant,
+                    ),
+                  ),
+                ],
+              ),
+            )
+          : RichText(
+              text: TextSpan(
+                style: DefaultTextStyle.of(context).style,
+                children: [
+                  TextSpan(
+                    text: DateFormat("d MMMM, yyyy").format(selectedDate),
+                    style: const TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  TextSpan(
+                    text: " ${DateFormat("EEE").format(selectedDate)}",
+                    style: TextStyle(
+                      fontSize: 12,
+                      color: Theme.of(context).colorScheme.onSurfaceVariant,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+    ),
+  ),
+),
+              const SizedBox(width: 12),
 
                   if (!isToday())
                     FilledButton.tonal(
