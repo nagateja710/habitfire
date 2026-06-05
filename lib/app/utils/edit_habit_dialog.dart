@@ -29,6 +29,7 @@ class _EditHabitDialogState extends State<EditHabitDialog> {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
+     
       title: const Text("Edit Habit"),
 
       content: SingleChildScrollView(

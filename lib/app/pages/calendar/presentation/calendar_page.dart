@@ -4,6 +4,27 @@ import 'package:table_calendar/table_calendar.dart';
 import '../../../models/habit.dart';
 import 'package:habitfire/app/utils/helper.dart';
 
+bool habitExistsOnDay(Habit habit, DateTime day) {
+  final loggedDates = habit.dailyCounts.keys.toList();
+
+  if (loggedDates.isEmpty) {
+    return !habit.createdAt.isAfter(day);
+  }
+
+  final firstDate = loggedDates
+      .map((e) {
+        final parts = e.split('-');
+        return DateTime(
+          int.parse(parts[0]),
+          int.parse(parts[1]),
+          int.parse(parts[2]),
+        );
+      })
+      .reduce((a, b) => a.isBefore(b) ? a : b);
+
+  return !firstDate.isAfter(day);
+}
+
 class CalendarPage extends StatefulWidget {
   const CalendarPage({super.key});
 
@@ -29,12 +50,16 @@ class _CalendarPageState extends State<CalendarPage> {
 
   // FIXED: Swapped standard colors for bright Accent colors and stripped out .withOpacity()
   Color? getDayColor(DateTime day) {
-    final habits =  HabitFilters.active(habitsBox.values.toList());
+    final habits = HabitFilters.active(habitsBox.values.toList());
 
     int total = 0;
     int completed = 0;
 
     for (final habit in habits) {
+      if (!habitExistsOnDay(habit, day)) {
+        continue;
+      }
+
       if (!habit.activeDays.contains(day.weekday)) {
         continue;
       }
@@ -135,15 +160,19 @@ class _CalendarPageState extends State<CalendarPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(  backgroundColor: Colors.transparent,title: const Text("Calendar")),
+      appBar: AppBar(
+        backgroundColor: Colors.transparent,
+        title: const Text("Calendar"),
+      ),
       body: ValueListenableBuilder(
         valueListenable: habitsBox.listenable(),
         builder: (context, Box<Habit> box, _) {
           final habits = HabitFilters.active(box.values.toList());
 
-          final scheduledHabits = habits
-              .where((habit) => habit.activeDays.contains(selectedDay.weekday))
-              .toList();
+          final scheduledHabits = habits.where((habit) {
+            return habitExistsOnDay(habit, selectedDay) &&
+                habit.activeDays.contains(selectedDay.weekday);
+          }).toList();
 
           final completedCount = scheduledHabits
               .where(

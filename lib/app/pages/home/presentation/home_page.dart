@@ -6,6 +6,7 @@ import 'package:habitfire/app/models/habit.dart';
 import 'package:habitfire/app/widgets/habit_card.dart';
 import 'package:habitfire/app/pages/addhabit/presentation/add_habit_page.dart';
 import 'package:habitfire/app/utils/helper.dart';
+import 'package:intl/intl.dart';
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
 
@@ -101,9 +102,9 @@ class _HomePageState extends State<HomePage> {
           padding: const EdgeInsets.all(20),
           child: Column(
             children: [
-              const SizedBox(height: 10),
+              // const SizedBox(height: 10),
 
-              const SizedBox(height: 30),
+              // const SizedBox(height: 30),
 
               /// DATE CONTROLS
               Row(
@@ -122,15 +123,53 @@ class _HomePageState extends State<HomePage> {
                           selectedDate = DateTime.now();
                         });
                       },
-                      child: Text(
-                        isToday()
-                            ? "Today"
-                            : "${selectedDate.day}/${selectedDate.month}/${selectedDate.year}",
-                        style: const TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
+                      child: 
+                      isToday() ?
+                      RichText(
+                        text: TextSpan(
+                          style: DefaultTextStyle.of(context).style,
+                          children: [
+                            const TextSpan(
+                              text: "Today",
+                              style: TextStyle(
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            TextSpan(
+                              text:
+                                  " ${DateFormat(", EEE").format(selectedDate)}",
+                              style: TextStyle(
+                                fontSize: 12,
+                                color:
+                                    Theme.of(context).colorScheme.onSurfaceVariant,
+                              ),
+                            ),
+                          ],
                         ),
-                      ),
+                      )
+    : RichText(
+        text: TextSpan(
+          style: DefaultTextStyle.of(context).style,
+          children: [
+            TextSpan(
+              text: DateFormat("d MMMM, yyyy").format(selectedDate),
+              style: const TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            TextSpan(
+              text: " ${DateFormat("EEE").format(selectedDate)}",
+              style: TextStyle(
+                fontSize: 12,
+                color: Theme.of(context).colorScheme.onSurfaceVariant,
+              ),
+            ),
+          ],
+        ),
+      )
+                    
                     ),
                   ),
 
@@ -163,6 +202,7 @@ class _HomePageState extends State<HomePage> {
                     final habits = HabitFilters.active(box.values.toList());
 
                     return ListView.builder(
+                       padding: const EdgeInsets.only(bottom: 60),
                       itemCount: habits.length,
                       itemBuilder: (context, index) {
                         final habit = habits[index];
@@ -333,4 +373,5 @@ class _HomePageState extends State<HomePage> {
       ),
     );
   }
+
 }
