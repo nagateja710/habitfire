@@ -23,6 +23,8 @@ class BackupService {
           "createdAt": h.createdAt.toIso8601String(),
           "activeDays": h.activeDays,
           "dailyCounts": h.dailyCounts,
+          "isAchieved": h.isAchieved,
+          "achievedAt": h.achievedAt?.toIso8601String(),
         };
       }).toList();
 
@@ -110,6 +112,14 @@ class BackupService {
                 Map<String, int>.from(
                   item["dailyCounts"] ?? {},
                 ),
+              isAchieved: item["isAchieved"] ?? false,
+              achievedAt: item["achievedAt"] != null
+                  ? DateTime.parse(
+                      item["achievedAt"],
+                    )
+                  : null,
+
+
           ),
         );
       }
